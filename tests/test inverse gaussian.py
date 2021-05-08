@@ -50,6 +50,8 @@ model = glm_inverse_gaussian(link = "1/mu^2")
 model.fit(X, Y)
 
 test_results(model.coef(), Beta, 1)
+np.mean(np.abs(Y -  model.predict(X))) < 1
+
 del Beta, X, Y, model
 
 ####################

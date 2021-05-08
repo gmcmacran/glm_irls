@@ -46,7 +46,15 @@ model = glm_bernoulli(link = "logit")
 model.fit(X, Y)
 
 test_results(model.coef(), Beta, .1)
-del Beta, X, Y, model
+
+props = model.predict_proba(X)
+np.unique(np.sum(props, axis = 1))
+
+YHat = model.predict(X)
+YHat.min()
+YHat.max()
+
+del Beta, X, Y, model, props, YHat
 
 ####################
 # Test probit link
@@ -59,4 +67,3 @@ model.fit(X, Y)
 
 test_results(model.coef(), Beta, .1)
 del Beta, X, Y, model
-
