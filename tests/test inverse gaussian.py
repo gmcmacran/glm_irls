@@ -42,7 +42,7 @@ def make_dataset(N, Beta, link):
     return X, Y
 
 ####################
-# Test inverse link
+# Test 1/mu^2 link
 ####################
 Beta = np.array([.5, 1, 1.5])
 X, Y = make_dataset(N = 25000, Beta = Beta, link = "1/mu^2")
@@ -74,7 +74,7 @@ X, Y = make_dataset(N = 25000, Beta = Beta, link = "identity")
 model = glm_inverse_gaussian(link = "identity")
 model.fit(X, Y)
 
-test_results(model, Beta, X, Y, 1, 1)
+test_results(model, Beta, X, Y, 1, 4)
 del Beta, X, Y, model
 
 ####################
@@ -86,5 +86,7 @@ X, Y = make_dataset(N = 25000, Beta = Beta, link = "log")
 model = glm_inverse_gaussian(link = "log")
 model.fit(X, Y)
 
-test_results(model.coef(), Beta, 1)
+Y.min()
+Y.max()
+test_results(model, Beta, X, Y, 1, 100) #Range of Y with log link is insane
 del Beta, X, Y, model
