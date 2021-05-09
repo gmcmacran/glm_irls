@@ -9,10 +9,11 @@ from models import glm_inverse_gaussian
 ####################
 # helpers to test results
 ####################
-def test_results(BHat, Beta, cutoff = .1):
-    T1 = np.all(BHat.shape == Beta.shape)
-    T2 = np.sum(np.abs(BHat - Beta)) < cutoff
-    return T1 and T2
+def test_results(model, Beta, X, Y, cutoff1 = .1, cutoff2 = 1):
+    T1 = np.all(model.coef().shape == Beta.shape)
+    T2 = np.sum(np.abs(model.coef() - Beta)) < cutoff1
+    T3  = np.mean(np.abs(Y -  model.predict(X))) < cutoff2
+    return T1 and T2 and T3
 
 def make_dataset(N, Beta, link):
     np.random.seed(1)
@@ -41,7 +42,7 @@ def make_dataset(N, Beta, link):
     return X, Y
 
 ####################
-# Test inverse link
+# Test 1/mu^2 link
 ####################
 Beta = np.array([.5, 1, 1.5])
 X, Y = make_dataset(N = 25000, Beta = Beta, link = "1/mu^2")
@@ -49,7 +50,7 @@ X, Y = make_dataset(N = 25000, Beta = Beta, link = "1/mu^2")
 model = glm_inverse_gaussian(link = "1/mu^2")
 model.fit(X, Y)
 
-test_results(model.coef(), Beta, 1)
+test_results(model, Beta, X, Y, 1, 1)
 del Beta, X, Y, model
 
 ####################
@@ -61,7 +62,7 @@ X, Y = make_dataset(N = 50000, Beta = Beta, link = "inverse")
 model = glm_inverse_gaussian(link = "inverse")
 model.fit(X, Y)
 
-test_results(model.coef(), Beta, 1)
+test_results(model, Beta, X, Y, 1, 1)
 del Beta, X, Y, model
 
 ####################
@@ -73,7 +74,7 @@ X, Y = make_dataset(N = 25000, Beta = Beta, link = "identity")
 model = glm_inverse_gaussian(link = "identity")
 model.fit(X, Y)
 
-test_results(model.coef(), Beta, 1)
+test_results(model, Beta, X, Y, 1, 4)
 del Beta, X, Y, model
 
 ####################
@@ -85,5 +86,7 @@ X, Y = make_dataset(N = 25000, Beta = Beta, link = "log")
 model = glm_inverse_gaussian(link = "log")
 model.fit(X, Y)
 
-test_results(model.coef(), Beta, 1)
+Y.min()
+Y.max()
+test_results(model, Beta, X, Y, 1, 100) #Range of Y with log link is insane
 del Beta, X, Y, model

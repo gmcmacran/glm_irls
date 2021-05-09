@@ -32,6 +32,9 @@ class glm_gaussian:
     
     def __a_of_phi(self,Y, mu, B):
         return np.sum(np.power(Y - mu, 2)) / (Y.shape[0] - B.shape[0])
+    
+    def predict(self, X):
+        return self.__inv_link(X.dot(self.__B))
             
     def fit(self, X, Y):
         self.__B = np.zeros([X.shape[1]])
@@ -83,6 +86,15 @@ class glm_bernoulli:
     
     def __a_of_phi(self,Y, mu, B):
         return np.ones([Y.shape[0],])
+    
+    def predict_proba(self, X):
+        props = self.__inv_link(X.dot(self.__B))
+        props = np.array([1 - props, props]).T
+        return props
+    
+    def predict(self, X):
+        probs = self.predict_proba(X)
+        return np.where(probs[:,0] <= .5, 0, 1)
             
     def fit(self, X, Y):
         self.__B = np.zeros([X.shape[1]])
@@ -137,6 +149,9 @@ class glm_poisson:
     
     def __a_of_phi(self,Y, mu, B):
         return np.ones([Y.shape[0],])
+    
+    def predict(self, X):
+        return self.__inv_link(X.dot(self.__B))
             
     def fit(self, X, Y):
         self.__B = np.zeros([X.shape[1]])
@@ -199,6 +214,9 @@ class glm_gamma:
         phi2 = np.sum(numerator2 / denominator2)
         out = np.ones([Y.shape[0]]) * phi2
         return out
+    
+    def predict(self, X):
+        return self.__inv_link(X.dot(self.__B))
             
     def fit(self, X, Y):
         self.__B = np.zeros([X.shape[1]])
@@ -261,6 +279,9 @@ class glm_inverse_gaussian:
     
     def __a_of_phi(self,Y, mu, B):
         return -1 * np.sum(np.power(Y - mu, 2)) / (Y.shape[0] - B.shape[0])
+    
+    def predict(self, X):
+        return self.__inv_link(X.dot(self.__B))
             
     def fit(self, X, Y):
         self.__B = np.zeros([X.shape[1]])
