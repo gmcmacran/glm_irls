@@ -27,7 +27,7 @@ def make_dataset(N, Beta, link):
     elif link == "log":
         def inv_link(eta):
             return np.exp(eta)
-    elif link == "reciprocal":
+    elif link == "inverse":
         def inv_link(eta):
             return 1 / eta
     else:
@@ -63,12 +63,12 @@ test_results(model, Beta, X, Y, .1)
 del Beta, X, Y, model
 
 ####################
-# Test reciprocal link
+# Test inverse link
 ####################
 Beta = np.array([.5, 1, 1.5])
-X, Y = make_dataset(N = 25000, Beta = Beta, link = "reciprocal")
+X, Y = make_dataset(N = 25000, Beta = Beta, link = "inverse")
 
-model = glm_gaussian(link = "reciprocal")
+model = glm_gaussian(link = "inverse")
 model.fit(X, Y)
 
 test_results(model, Beta, X, Y, 1)

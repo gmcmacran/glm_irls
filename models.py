@@ -14,7 +14,7 @@ class glm_gaussian:
         elif self.__link == "log":
             return np.exp(eta)
         
-        elif self.__link == "reciprocal":
+        elif self.__link == "inverse":
             return 1 / eta
         
     def __del_eta_del_mu(self, mu):
@@ -24,7 +24,7 @@ class glm_gaussian:
         elif self.__link == "log":
             return 1/mu
         
-        elif self.__link == "reciprocal":
+        elif self.__link == "inverse":
             return -1 / np.power(mu,2)
         
     def __var_mu(self, mu):
