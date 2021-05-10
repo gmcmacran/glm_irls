@@ -94,7 +94,7 @@ class glm_bernoulli:
     
     def predict(self, X):
         probs = self.predict_proba(X)
-        return np.where(probs[:,0] <= .5, 0, 1)
+        return np.where(probs[:,1] <= .5, 0, 1)
             
     def fit(self, X, Y):
         self.__B = np.zeros([X.shape[1]])
