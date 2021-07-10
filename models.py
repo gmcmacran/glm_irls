@@ -1,11 +1,48 @@
 import numpy as np
 import scipy.stats as stats
 
-class glm_gaussian:
+class IRLS(object):
     
     def __init__(self, link):
         self.__B = np.zeros([0])
         self.__link = link
+    
+    def fit(self, X, Y):
+        self.__B = np.zeros([X.shape[1]])
+        self.__B[X.shape[1] - 1] = np.mean(Y)
+        
+        tol = 1000
+        while(tol > 0.00001):
+            eta = X.dot(self.__B)
+            mu = self.__inv_link(eta)
+            
+            print(mu)
+            print((1 / (self.__var_mu(mu))))
+            print(self.__a_of_phi(Y, mu, self.__B) )
+            print(np.power(self.__del_eta_del_mu(mu),2))
+                  
+    
+            _w = (1 / (self.__var_mu(mu) * self.__a_of_phi(Y, mu, self.__B) )) * np.power(self.__del_eta_del_mu(mu),2)
+            # W = np.diag(_w)
+            #z = (Y - mu) * self.__del_eta_del_mu(mu) + eta
+            # B_update = np.linalg.inv(X.T.dot(W).dot(X)).dot(X.T).dot(W).dot(z)
+    
+            # tol =  np.sum(np.abs(B_update - self.__B))
+            # print(tol)
+    
+            self.__B = B_update.copy()
+            
+    def coef(self):
+        return self.__B
+    
+
+class glm_gaussian(IRLS):
+    
+    def coef(self):
+        return self._IRLS__coef()
+    
+    def __init__(self, link):
+        super().__init__(link)
         
     def __inv_link(self, eta):
         if self.__link == "identity":
@@ -35,34 +72,9 @@ class glm_gaussian:
     
     def predict(self, X):
         return self.__inv_link(X.dot(self.__B))
-            
-    def fit(self, X, Y):
-        self.__B = np.zeros([X.shape[1]])
-        self.__B[X.shape[1] - 1] = np.mean(Y)
-        
-        tol = 1000
-        while(tol > 0.00001):
-            eta = X.dot(self.__B)
-            mu = self.__inv_link(eta)
+
     
-            _w = (1 / (self.__var_mu(mu) * self.__a_of_phi(Y, mu, self.__B) )) * np.power(self.__del_eta_del_mu(mu),2)
-            W = np.diag(_w)
-            z = (Y - mu) * self.__del_eta_del_mu(mu) + eta
-            B_update = np.linalg.inv(X.T.dot(W).dot(X)).dot(X.T).dot(W).dot(z)
-    
-            tol =  np.sum(np.abs(B_update - self.__B))
-            # print(tol)
-    
-            self.__B = B_update.copy()
-            
-    def coef(self):
-        return self.__B
-    
-class glm_bernoulli:
-    
-    def __init__(self, link):
-        self.__B = np.zeros([0])
-        self.__link = link
+class glm_bernoulli(IRLS):
         
     def __inv_link(self, eta):
         
@@ -95,34 +107,9 @@ class glm_bernoulli:
     def predict(self, X):
         probs = self.predict_proba(X)
         return np.where(probs[:,1] <= .5, 0, 1)
-            
-    def fit(self, X, Y):
-        self.__B = np.zeros([X.shape[1]])
-        self.__B[X.shape[1] - 1] = np.mean(Y)
-        
-        tol = 1000
-        while(tol > 0.00001):
-            eta = X.dot(self.__B)
-            mu = self.__inv_link(eta)
+
     
-            _w = (1 / (self.__var_mu(mu) * self.__a_of_phi(Y, mu, self.__B) )) * np.power(self.__del_eta_del_mu(mu),2)
-            W = np.diag(_w)
-            z = (Y - mu) * self.__del_eta_del_mu(mu) + eta
-            B_update = np.linalg.inv(X.T.dot(W).dot(X)).dot(X.T).dot(W).dot(z)
-    
-            tol =  np.sum(np.abs(B_update - self.__B))
-            # print(tol)
-    
-            self.__B = B_update.copy()
-            
-    def coef(self):
-        return self.__B
-    
-class glm_poisson:
-    
-    def __init__(self, link):
-        self.__B = np.zeros([0])
-        self.__link = link
+class glm_poisson(IRLS):
         
     def __inv_link(self, eta):
         if self.__link == "log":
@@ -152,34 +139,9 @@ class glm_poisson:
     
     def predict(self, X):
         return self.__inv_link(X.dot(self.__B))
-            
-    def fit(self, X, Y):
-        self.__B = np.zeros([X.shape[1]])
-        self.__B[X.shape[1] - 1] = np.mean(Y)
-        
-        tol = 1000
-        while(tol > 0.00001):
-            eta = X.dot(self.__B)
-            mu = self.__inv_link(eta)
+
     
-            _w = (1 / (self.__var_mu(mu) * self.__a_of_phi(Y, mu, self.__B) )) * np.power(self.__del_eta_del_mu(mu),2)
-            W = np.diag(_w)
-            z = (Y - mu) * self.__del_eta_del_mu(mu) + eta
-            B_update = np.linalg.inv(X.T.dot(W).dot(X)).dot(X.T).dot(W).dot(z)
-    
-            tol =  np.sum(np.abs(B_update - self.__B))
-            # print(tol)
-    
-            self.__B = B_update.copy()
-            
-    def coef(self):
-        return self.__B
-    
-class glm_gamma:
-    
-    def __init__(self, link):
-        self.__B = np.zeros([0])
-        self.__link = link
+class glm_gamma(IRLS):
         
     def __inv_link(self, eta):
         
@@ -217,34 +179,9 @@ class glm_gamma:
     
     def predict(self, X):
         return self.__inv_link(X.dot(self.__B))
-            
-    def fit(self, X, Y):
-        self.__B = np.zeros([X.shape[1]])
-        self.__B[X.shape[1] - 1] = np.mean(Y)
-        
-        tol = 1000
-        while(tol > 0.00001):
-            eta = X.dot(self.__B)
-            mu = self.__inv_link(eta)
+
     
-            _w = (1 / (self.__var_mu(mu) * self.__a_of_phi(Y, mu, self.__B) )) * np.power(self.__del_eta_del_mu(mu),2)
-            W = np.diag(_w)
-            z = (Y - mu) * self.__del_eta_del_mu(mu) + eta
-            B_update = np.linalg.inv(X.T.dot(W).dot(X)).dot(X.T).dot(W).dot(z)
-    
-            tol =  np.sum(np.abs(B_update - self.__B))
-            # print(tol)
-    
-            self.__B = B_update.copy()
-            
-    def coef(self):
-        return self.__B
-    
-class glm_inverse_gaussian:
-    
-    def __init__(self, link):
-        self.__B = np.zeros([0])
-        self.__link = link
+class glm_inverse_gaussian(IRLS):
         
     def __inv_link(self, eta):
         
@@ -282,25 +219,3 @@ class glm_inverse_gaussian:
     
     def predict(self, X):
         return self.__inv_link(X.dot(self.__B))
-            
-    def fit(self, X, Y):
-        self.__B = np.zeros([X.shape[1]])
-        self.__B[X.shape[1] - 1] = np.mean(Y)
-        
-        tol = 1000
-        while(tol > 0.00001):
-            eta = X.dot(self.__B)
-            mu = self.__inv_link(eta)
-    
-            _w = (1 / (self.__var_mu(mu) * self.__a_of_phi(Y, mu, self.__B) )) * np.power(self.__del_eta_del_mu(mu),2)
-            W = np.diag(_w)
-            z = (Y - mu) * self.__del_eta_del_mu(mu) + eta
-            B_update = np.linalg.inv(X.T.dot(W).dot(X)).dot(X.T).dot(W).dot(z)
-    
-            tol =  np.sum(np.abs(B_update - self.__B))
-            # print(tol)
-    
-            self.__B = B_update.copy()
-            
-    def coef(self):
-        return self.__B
