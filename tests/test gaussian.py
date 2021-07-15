@@ -44,7 +44,7 @@ def make_dataset(N, Beta, link):
 Beta = np.array([.5, 1, 1.5])
 X, Y = make_dataset(N = 25000, Beta = Beta, link = "identity")
 
-model = glm_gaussian(link = "identity")
+model = glm_gaussian("identity")
 model.fit(X, Y)
 
 test_results(model, Beta, X, Y, .1)
