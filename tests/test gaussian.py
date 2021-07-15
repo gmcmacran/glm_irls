@@ -73,8 +73,3 @@ model.fit(X, Y)
 
 test_results(model, Beta, X, Y, 1)
 del Beta, X, Y, model
-
-####################
-# Test link logic
-####################
-# model = glm_gaussian(link = "foo")
