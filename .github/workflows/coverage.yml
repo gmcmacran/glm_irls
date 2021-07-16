@@ -1,3 +1,7 @@
+on:
+  pull_request:
+    branches: 
+      - '*'
 steps:
   # (Other steps go here)
   - name: "Upload coverage to Codecov"
