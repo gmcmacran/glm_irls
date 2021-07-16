@@ -2,14 +2,15 @@
 # Testing IRLS with gaussian settings
 ########################################
 import numpy as np
-import os
-os.chdir('S:/Python/projects/glm_irls')
+from numpy.testing import assert_equal
 from models import glm_gaussian
+import pytest
+
 
 ####################
 # helpers to test results
 ####################
-def test_results(model, Beta, X, Y, cutoff = .1):
+def check_results(model, Beta, X, Y, cutoff = .1):
     T1 = np.all(model.coef().shape == Beta.shape)
     T2 = np.sum(np.abs(model.coef() - Beta)) < cutoff
     T3  = np.sum(np.power(Y -  model.predict(X),2)) < np.sum(np.power(Y -  np.mean(Y),2))
@@ -38,38 +39,28 @@ def make_dataset(N, Beta, link):
         
     return X, Y
 
-####################
-# Test identity link
-####################
-Beta = np.array([.5, 1, 1.5])
-X, Y = make_dataset(N = 25000, Beta = Beta, link = "identity")
+def test_fit():
+    
+    links = ["identity", "log", "inverse"]
+    for link in links:
+        if link == "identity":
+            Beta = np.array([.5, 1, 1.5])
+            X, Y = make_dataset(N = 25000, Beta = Beta, link = link)
+            cutoff = .1
+        elif link == "log":
+            Beta = np.array([.04, .02, .015])
+            X, Y = make_dataset(N = 25000, Beta = Beta, link = link)
+            cutoff = .1
+        elif link == "inverse":
+            Beta = np.array([.5, 1, 1.5])
+            X, Y = make_dataset(N = 25000, Beta = Beta, link = link)
+            cutoff = 1
 
-model = glm_gaussian("identity")
-model.fit(X, Y)
+        model = glm_gaussian(link)
+        model.fit(X, Y)
+    
+        assert_equal(check_results(model, Beta, X, Y, cutoff), True)
 
-test_results(model, Beta, X, Y, .1)
-del Beta, X, Y, model
-
-####################
-# Test log link
-####################
-Beta = np.array([.04, .02, .015])
-X, Y = make_dataset(N = 25000, Beta = Beta, link = "log")
-
-model = glm_gaussian(link = "log")
-model.fit(X, Y)
-
-test_results(model, Beta, X, Y, .1)
-del Beta, X, Y, model
-
-####################
-# Test inverse link
-####################
-Beta = np.array([.5, 1, 1.5])
-X, Y = make_dataset(N = 25000, Beta = Beta, link = "inverse")
-
-model = glm_gaussian(link = "inverse")
-model.fit(X, Y)
-
-test_results(model, Beta, X, Y, 1)
-del Beta, X, Y, model
+def test_valid_links():
+    with pytest.raises(ValueError):
+        glm_gaussian("foo")
