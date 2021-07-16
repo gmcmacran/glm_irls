@@ -91,6 +91,12 @@ class IRLS(ABC):
     
 
 class glm_gaussian(IRLS):
+    
+    def __init__(self, link):
+        if (link=="identity" or link=="log" or link=="inverse"):
+            super().__init__(link)
+        else:
+            raise ValueError("Invalid link")
             
     def _IRLS__var_mu(self, mu):
         return np.ones([mu.shape[0],])
@@ -100,6 +106,12 @@ class glm_gaussian(IRLS):
          
 
 class glm_bernoulli(IRLS):
+    
+    def __init__(self, link):
+        if (link=="logit" or link=="probit"):
+            super().__init__(link)
+        else:
+            raise ValueError("Invalid link")
          
     def _IRLS__var_mu(self, mu):
         return mu * (1 - mu)
@@ -119,6 +131,12 @@ class glm_bernoulli(IRLS):
     
 class glm_poisson(IRLS):
     
+    def __init__(self, link):
+        if (link=="log" or link=="identity" or link=="sqrt"):
+            super().__init__(link)
+        else:
+            raise ValueError("Invalid link")
+    
     def _IRLS__var_mu(self, mu):
         return mu
     
@@ -127,6 +145,12 @@ class glm_poisson(IRLS):
 
     
 class glm_gamma(IRLS):
+    
+    def __init__(self, link):
+        if (link=="inverse" or link=="identity" or link=="log"):
+            super().__init__(link)
+        else:
+            raise ValueError("Invalid link")
           
     def _IRLS__var_mu(self, mu):
         return np.power(mu,2)
@@ -142,6 +166,12 @@ class glm_gamma(IRLS):
 
     
 class glm_inverse_gaussian(IRLS):
+    
+    def __init__(self, link):
+        if (link=="1/mu^2" or link=="inverse" or link=="identity" or link=="log"):
+            super().__init__(link)
+        else:
+            raise ValueError("Invalid link")
         
     def _IRLS__var_mu(self, mu):
         return np.power(mu,3)

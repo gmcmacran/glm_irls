@@ -2,15 +2,15 @@
 # Testing IRLS with bernoulli settings
 ########################################
 import numpy as np
+from numpy.testing import assert_equal
 import scipy.stats as stats
-import os
-os.chdir('S:/Python/projects/glm_irls')
 from models import glm_bernoulli
+import pytest
 
 ####################
 # helpers to test results
 ####################
-def test_results(model, Beta, X, Y, cutoff = .1):
+def check_results(model, Beta, X, Y, cutoff = .1):
     T1 = np.all(model.coef().shape == Beta.shape)
     T2 = np.sum(np.abs(model.coef() - Beta)) < cutoff
     T3  = model.predict_proba(X).min() >= 0 and model.predict_proba(X).max() <= 1
@@ -39,26 +39,24 @@ def make_dataset(N, Beta, link):
         
     return X, Y
 
-####################
-# Test logit link
-####################
-Beta = np.array([.04, .02, .015])
-X, Y = make_dataset(N = 25000, Beta = Beta, link = "logit")
+def test_fit():
+    
+    links = ["logit", "probit"]
+    for link in links:
+        if link == "logit":
+            Beta = np.array([.04, .02, .015])
+            X, Y = make_dataset(N = 25000, Beta = Beta, link = link)
+            cutoff = .1
+        elif link == "probit":
+            Beta = np.array([.04, .02, .015])
+            X, Y = make_dataset(N = 25000, Beta = Beta, link = link)
+            cutoff = .1
 
-model = glm_bernoulli(link = "logit")
-model.fit(X, Y)
+        model = glm_bernoulli(link)
+        model.fit(X, Y)
+    
+        assert_equal(check_results(model, Beta, X, Y, cutoff), True)
 
-test_results(model, Beta, X, Y, .1)
-del Beta, X, Y, model
-
-####################
-# Test probit link
-####################
-Beta = np.array([.04, .02, .015])
-X, Y = make_dataset(N = 25000, Beta = Beta, link = "probit")
-
-model = glm_bernoulli(link = "probit")
-model.fit(X, Y)
-
-test_results(model, Beta, X, Y, .1)
-del Beta, X, Y, model
+def test_valid_links():
+    with pytest.raises(ValueError):
+        glm_bernoulli("foo")
