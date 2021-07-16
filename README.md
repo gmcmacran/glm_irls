@@ -12,4 +12,4 @@ The models implemented are:
 # What does this library depend on?
 * `numpy`: for matrices
 * `scipy`: for a few mathematical operations
-
+* `pytest`: for testing
