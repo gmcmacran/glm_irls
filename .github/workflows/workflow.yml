@@ -1,5 +1,13 @@
 name: Example workflow for Codecov
-on: [pull_request, merge]
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
 jobs:
   run:
     runs-on: ${{ matrix.os }}
