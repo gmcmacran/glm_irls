@@ -45,12 +45,12 @@ def test_fit():
     for link in links:
         if link == "logit":
             Beta = np.array([.04, .02, .015])
-            X, Y = make_dataset(N = 25000, Beta = Beta, link = link)
-            cutoff = .1
+            X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
+            cutoff = 1
         elif link == "probit":
             Beta = np.array([.04, .02, .015])
-            X, Y = make_dataset(N = 25000, Beta = Beta, link = link)
-            cutoff = .1
+            X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
+            cutoff = 1
 
         model = glm_bernoulli(link)
         model.fit(X, Y)
