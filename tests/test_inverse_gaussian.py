@@ -47,19 +47,19 @@ def test_fit():
     for link in links:
         if link == "1/mu^2":
             Beta = np.array([.5, 1, 1.5])
-            X, Y = make_dataset(N = 50000, Beta = Beta, link = link)
+            X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
             cutoff = 1
         elif link == "inverse":
             Beta = np.array([.5, 1, 1.5])
-            X, Y = make_dataset(N = 50000, Beta = Beta, link = link)
+            X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
             cutoff = 1
         elif link == "identity":
             Beta = np.array([.5, 1, 1.5])
-            X, Y = make_dataset(N = 25000, Beta = Beta, link = link)
+            X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
             cutoff = 1
         elif link == "log":
             Beta = np.array([.5, 1, 1.5])
-            X, Y = make_dataset(N = 25000, Beta = Beta, link = link)
+            X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
             cutoff = 1
 
         model = glm_inverse_gaussian(link)

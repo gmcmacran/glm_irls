@@ -44,16 +44,16 @@ def test_fit():
     for link in links:
         if link == "log":
             Beta = np.array([.04, .02, .015])
-            X, Y = make_dataset(N = 25000, Beta = Beta, link = link)
-            cutoff = .1
+            X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
+            cutoff = 1
         elif link == "identity":
             Beta = np.array([.5, 1, 1.5])
-            X, Y = make_dataset(N = 25000, Beta = Beta, link = link)
+            X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
             cutoff = 1
         elif link == "sqrt":
             Beta = np.array([.5, 1, 1.5])
-            X, Y = make_dataset(N = 25000, Beta = Beta, link = link)
-            cutoff = .1
+            X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
+            cutoff = 1
 
         model = glm_poisson(link)
         model.fit(X, Y)

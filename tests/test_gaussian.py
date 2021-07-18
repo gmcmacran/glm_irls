@@ -46,11 +46,11 @@ def test_fit():
         if link == "identity":
             Beta = np.array([.5, 1, 1.5])
             X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
-            cutoff = 2
+            cutoff = 1
         elif link == "log":
             Beta = np.array([.04, .02, .015])
             X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
-            cutoff = 2
+            cutoff = 1
         elif link == "inverse":
             Beta = np.array([.5, 1, 1.5])
             X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
