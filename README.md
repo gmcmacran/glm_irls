@@ -1,4 +1,4 @@
-![testAndCoverage](https://github.com/gmcmacran/glm_irls/actions/workflows/<workflow>/badge.svg)
+![testing and code coverage](https://github.com/gmcmacran/glm_irls/actions/workflows/<workflow>/badge.svg)
 [![codecov](https://codecov.io/gh/gmcmacran/glm_irls/branch/main/graph/badge.svg?token=LUO9RKHDMQ)](https://codecov.io/gh/gmcmacran/glm_irls)
 
 # What is this library?
