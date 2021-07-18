@@ -52,9 +52,9 @@ def test_fit():
             X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
             cutoff = 1
         elif link == "inverse":
-            Beta = np.array([.5, 1, 1.5])
+            Beta = np.array([-.5, -1, -1.5])
             X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
-            cutoff = 2
+            cutoff = 5
 
         model = glm_gaussian(link)
         model.fit(X, Y)

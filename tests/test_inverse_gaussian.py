@@ -56,11 +56,11 @@ def test_fit():
         elif link == "identity":
             Beta = np.array([.5, 1, 1.5])
             X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
-            cutoff = 1
+            cutoff = 2
         elif link == "log":
             Beta = np.array([.5, 1, 1.5])
             X, Y = make_dataset(N = 10000, Beta = Beta, link = link)
-            cutoff = 1
+            cutoff = 2
 
         model = glm_inverse_gaussian(link)
         model.fit(X, Y)
