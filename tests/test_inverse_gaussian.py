@@ -13,7 +13,7 @@ def check_results(model, Beta, X, Y, cutoff = .1):
     T1 = np.all(model.coef().shape == Beta.shape)
     T2 = np.sum(np.abs(model.coef() - Beta)) < cutoff
     T3  = np.sum(np.power(Y -  model.predict(X),2)) < np.sum(np.power(Y -  np.mean(Y),2))
-    return T1 and T2 and T3
+    return T1 and T2 and T3 
 
 def make_dataset(N, Beta, link):
     np.random.seed(1)
