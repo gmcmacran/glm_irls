@@ -1,3 +1,6 @@
+![testAndCoverage](https://github.com/gmcmacran/glm_irls/actions/workflows/<workflow>/badge.svg)
+[![codecov](https://codecov.io/gh/gmcmacran/glm_irls/branch/main/graph/badge.svg?token=LUO9RKHDMQ)](https://codecov.io/gh/gmcmacran/glm_irls)
+
 # What is this library?
 An implementation of the [generlized linear model](https://en.wikipedia.org/wiki/Generalized_linear_model) 
 using [iteratively reweighted least squares](https://en.wikipedia.org/wiki/Iteratively_reweighted_least_squares)
